@@ -7,7 +7,7 @@ from django.urls import reverse
 from django.db.models import Max
 from decimal import Decimal
 
-from .models import User,AuctionListing,Comment
+from .models import User,AuctionListing,Comment,Category
 from .forms import CreateListingForm
 
 
@@ -172,3 +172,17 @@ def add_comment(request, listing_id):
             content=comment)
 
     return HttpResponseRedirect(reverse("listing", args=(listing_id,)))
+
+
+def category_list(request):
+    categories_list = Category.objects.all()
+    return render(request,"auctions/categories.html",{"categories_list": categories_list})
+
+def listing_by_category(request, category_id):
+    category = get_object_or_404(Category, pk=category_id)
+    listings = AuctionListing.objects.filter(is_active=True, category=category)
+    
+    return render(request,"auctions/index.html",{
+        "auctions_list": listings,
+        "title": f"{category.name} Listings"
+    })

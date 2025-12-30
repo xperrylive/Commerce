@@ -6,7 +6,12 @@
 
 
 {% block body %}
-<h2>Active Listings</h2>
+
+    {% if title %}
+    <h2>{{ title }}</h2>
+    {% else %}
+    <h2>Active Listings</h2>
+    {% endif %}
 
 <div class="container" style="margin: 10px 5px;">
     {%for listing in auctions_list%}
