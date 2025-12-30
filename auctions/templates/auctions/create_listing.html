@@ -1,0 +1,67 @@
+{% extends "auctions/layout.html" %}
+
+{% block title %}
+    Create Listing
+{% endblock %}
+
+{% block body %}
+
+<h1>Create Listing</h1>
+
+<form action="" method="post" style="width: 80%; padding: 20px;">
+    {% csrf_token %}
+    {% if form.errors %}
+    <div class="alert alert-danger" role="alert">
+        {% for field, errors in form.errors.items %}
+            {% for error in errors %}
+            {{ field }}: {{ error }}
+            {% endfor %}
+        {% endfor %}
+    </div>
+    {% endif %}
+    
+    
+    <div class="form-group">
+        <label for="title" class="form-label">Title</label>
+        
+        <input type="text" 
+        name="title"
+        value="{{ form.title.value|default:''}}" 
+        placeholder="Enter Title" 
+        id="title" 
+        class="form-control" 
+        required
+        >
+    </div>
+    
+    <div class="form-group">
+        <label for="description" class="form-label">Description</label>
+        <textarea name="description" id="description" class="form-control" rows="3" required>{{ form.description.value|default:'' }}</textarea>
+    </div>
+
+    <div class="form-group">
+        <label for="image_url" class="form-label">Image URL</label>
+        <input type="text" name="image_url" value="{{ form.image_url.value|default:'' }}" placeholder="Enter Image URL" id="image_url" class="form-control">
+    </div>
+
+    <div class="form-group">
+        <label for="starting_bid" class="form-label">Starting Price</label>
+        <input type="number" step="0.01" name="starting_bid" value="{{ form.starting_bid.value|default:'' }}" placeholder="Enter Starting Price" id="starting_bid" class="form-control" required>
+    </div>
+
+    <div class="form-group">
+        <label for="category" class="form-label">Category</label>
+        <select name="category" id="category" class="form-control">
+            <option value="" disabled>Select a Category</option>
+            {% for category in form.fields.category.queryset %}
+                <option value="{{ category.id }}" {% if form.category.value|stringformat:"s" == category.id|stringformat:"s" %}selected{% endif %}>{{ category.name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+
+
+
+{% endblock %}
